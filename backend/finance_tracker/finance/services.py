@@ -127,7 +127,6 @@ def calculate_balance(user_id):
 
     result = list(transactions_col.aggregate(pipeline))
 
-    print("DEBUG RESULT:", result)
    
 
 
