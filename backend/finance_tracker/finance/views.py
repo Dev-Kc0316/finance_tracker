@@ -14,7 +14,6 @@ from .serializers import serialize_list, serialize_doc
 def add_transaction(request):
 
     data = request.data.copy()
-    data["type"] = "expense"
 
     if not data.get("title") or not data.get("amount"):
         return Response({"error": "Title and amount required"}, status=400)

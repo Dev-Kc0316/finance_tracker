@@ -1,4 +1,3 @@
-import React from 'react';
 import { FaSun, FaMoon } from 'react-icons/fa';
 
 export default function ThemeToggle({ dark, setDark }) {

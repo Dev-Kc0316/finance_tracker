@@ -5,6 +5,7 @@ import ExpenseForm from '../components/ExpenseForm';
 import Chart from '../components/Chart';
 import { api } from '../services/api';
 import '../styles/dashboard.css';
+import { FaExclamationTriangle } from 'react-icons/fa';
 
 
 export default function Dashboard() {
@@ -23,6 +24,8 @@ export default function Dashboard() {
       setExpenses(data.transactions || []);
       setBalance(data.summary?.balance || 0);
       setUsername(data.user?.username ?? "");
+      setMonthlyExpenses(data.summary.monthly_expenses || 0);
+      setSavingsRate(data.summary?.savings_rate ?? 0);
 
    } catch(err){
       console.error(err.response?.data || err.message);
@@ -58,7 +61,24 @@ useEffect(()=>{
                     </div>
                     <div className="stat-card">
                         <h4>Savings Rate</h4>
-                        <h2>{savingsRate}%</h2>
+                        <h2 style={{
+                            color:
+                            savingsRate > 0? "limegreen":
+                            savingsRate < 0? "red":
+                            "gray" 
+                        }}>
+                        
+                        { savingsRate }%
+
+                        <div style={{display: "flex", alignItems: "center", gap: "0.09rem"}}>
+                        {savingsRate < 0 && (
+                            <>
+                            <FaExclamationTriangle size={16}/>
+                            <span style={{fontSize: "1rem"}}> Overspending</span>
+                            </>
+                        )} 
+                        </div>
+                        </h2>
                     </div>
                 </div>
                 <div className="dashboard-grid">
