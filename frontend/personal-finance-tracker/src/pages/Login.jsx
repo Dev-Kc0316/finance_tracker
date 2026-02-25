@@ -43,8 +43,8 @@ export default function Login(){
             <form onSubmit={login} className="login-form">
                 <h2>Welcome Back</h2>
                 <p>Login into your account</p>
-                <input type="email" placeholder='example@gmail.com' value={email} onChange={(e) => setEmail(e.target.value)} />
-                <input type="password" placeholder='***********' value={password} onChange={(e) => setPassword(e.target.value)} />
+                <input type="email" placeholder='example@gmail.com' value={email} onChange={(e) => setEmail(e.target.value)} required/>
+                <input type="password" placeholder='***********' value={password} onChange={(e) => setPassword(e.target.value)} required/>
 
                 {error && <p className='error-message'>{error}</p>}
 

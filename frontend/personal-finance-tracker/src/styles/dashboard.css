@@ -1,6 +1,13 @@
+*{
+    box-sizing: border-box;
+}
+html, body{
+    margin: 0;
+    padding: 0;
+}
 .dashboard{
     display: flex;
-    height: 100vh;
+    min-height: 100vh;
     background: linear-gradient(135deg, #f7f9fc, #eef2f7);
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
@@ -47,7 +54,20 @@
 .main-content{
     flex: 1;
     padding: 2.5rem;
-    overflow-y: auto;
+    max-width: 100%;
+    width: 100%;
+    margin-left: 16.25rem;
+    box-sizing: border-box;
+}
+.mobile-menu-btn{
+    display: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+.mobile-close-btn{
+    display: none;
+    cursor: pointer;
+    font-size: 1.5rem;
 }
 .dashboard-header{
     display: flex;
@@ -55,6 +75,8 @@
     align-items: center;
     margin-bottom: 1.875rem;
     min-height: 3.75rem;
+    flex-wrap: wrap;
+    gap: 0.75rem;
 }
 .dashboard-header h2{
     margin-right: 0.5rem;
@@ -64,10 +86,12 @@
 }
 .dashboard-grid{
     display: grid;
-    grid-template-columns: 2fr 1fr;
+    grid-template-columns: 1fr 1fr;
     gap: 1.5rem;
+    justify-content: center;
 }
 .card{
+    min-width: 0;
     backdrop-filter: blur(0.875rem);
     background: rgba(255, 255, 255, 0.4);
     border-radius: 1rem;
@@ -81,7 +105,14 @@
     box-shadow: 0 0.75rem 2.5rem rgba(0, 0, 0, 0.08);
 }
 .chart{
+    width: 100%;
+    overflow: hidden;
     min-height: 21.875rem;
+}
+.chart-container{
+    width: 100%;
+    height: 18.75rem;
+    position: relative;
 }
 .dashboard.dark{
     background: linear-gradient(135deg, #0f1115, #161a22);
@@ -100,17 +131,29 @@
     color: white;
 }
 .sidebar{
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
     width: 16.25rem;
     background: #0f172a;
     color: white;
     padding: 1.875rem 1.25rem;
     display: flex;
+    flex-shrink: 0;
     flex-direction: column;
     gap: 1.875rem;
     justify-content: flex-start;
+    transform: translateX(0);
+    transition: transform 0.3s ease;
+    z-index: 1000;
+}
+.sidebar-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 .sidebar h2{
-    margin-bottom: 1.25rem;
     font-weight: 600;
     text-align: center;
 }
@@ -121,7 +164,10 @@
     margin-bottom: 0.625rem;
 }
 .sidebar a{
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
     text-align: center;
     padding: 0.75rem 1rem;
     border-radius: 0.625rem;
@@ -135,6 +181,10 @@
     color: white;
 }
 .sidebar button{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
     padding: 0.75rem;
     border-radius: 0.625rem;
     border: none;
@@ -148,14 +198,33 @@
     background: rgba(239, 68, 68, 0.15);
     color: white;
 }
+.sidebar-overlay{
+    position: fixed;
+    inset: 0;
+    z-index: 999;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(0.1rem);
+    -webkit-backdrop-filter: blur(0.1rem);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+.sidebar-overlay.show{
+    opacity: 1;
+    pointer-events: auto;
+}
 .expense-form{
     display: flex;
     gap: 0.75rem;
     align-items: center;
     flex-wrap: wrap;
+    flex-direction: column;
+    align-items: stretch;
 }
 .expense-form input,
 .expense-form select{
+    width: 100%;
+    margin-bottom: 1.5rem;
     padding: 0.75rem 0.875rem;
     border-radius: 0.625rem;
     border: 0.063rem solid #e2e8f0;
@@ -172,7 +241,12 @@
 .dashboard.dark input::placeholder{
     color: white;
 }
+.card.table{
+    grid-column: 1 / -1;
+    width: 100%;
+}
 .expense-form button{
+    width: 100%;
     background: linear-gradient(135deg, #6366f1, #4f46e5);
     border: none;
     color: white;
@@ -192,22 +266,111 @@
     padding: 0.5rem;
     border: none;
 }
+.table-wrapper{
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+}
 .expense-table{
     width: 100%;
-    border-collapse: collapse;
+    min-width: 35.25rem;
 }
 .expense-table th{
     text-align: left;
     font-size: 0.8rem;
     color: #94a3b8;
     padding-bottom: 0.625rem;
+    white-space: nowrap;
 }
 .expense-table td{
-    padding: 0.625rem 0;
+    padding: 0.725rem 0;
     border-bottom: 0.063rem;
     font-size: 0.9rem;
+    white-space: nowrap;
 }
 .table h3{
     margin-bottom: 0.5rem;
     color: #161a22;
+}
+
+@media (max-width: 900px) {
+    .stats-row{
+        grid-template-columns: 1fr;
+    }
+    .card.table{
+        overflow-X: auto;
+    }
+}
+@media (max-width: 768px) {
+    .sidebar{
+        position: fixed;
+        width: 16.25rem;
+        max-width: 80%;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        transform: translateX(-100%);
+        z-index: 1000;
+    }
+    .sidebar.open{
+        transform: translateX(0);
+    }
+    .sidebar-overlay{
+        display: block;
+        position: fixed;
+    }
+    .mobile-menu-btn{
+        display: block;
+        align-items: center;
+    }
+    .mobile-close-btn{
+        display: block;
+    }
+    .dashboard{
+        display: block;
+    }
+    .main-content{
+        width: 100%;
+        min-width: 0;
+        padding: 1rem;
+        margin-left: 0 !important;
+    }
+    .sidebar.open{
+        transform: translateX(0);
+    }
+    .card, .chart{
+        max-width: 100%;
+        
+    }
+    .card{
+        padding: 1rem;
+    }
+    .stats-row{
+        grid-template-columns: 1fr !important;
+    }
+    .dashboard-grid{
+        grid-template-columns: 1fr !important;
+    }
+    .expense-form{
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .expense-form input,
+    .expense-form select,
+    .expense-form button{
+        width: 100%;
+    }
+    .sidebar a{
+        justify-content: flex-start;
+        text-align: left;
+        margin-left: -0.5rem;
+        padding: 0.65rem;
+    }
+    .sidebar button{
+        justify-content: flex-start;
+        text-align: left;
+        margin-left: -0.52rem;
+    }
 }

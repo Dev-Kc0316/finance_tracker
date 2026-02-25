@@ -6,16 +6,18 @@ import Signup from './pages/Signup';
 import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
 import Dashboard from './pages/Dashboard';
+import AddExpense from './pages/AddExpense';
 import './App.css';
 import ProtectedRoute from './components/ProtectedRoute';
 import PageTransition from './components/PageTransition';
 
 export default function App() {
-  const [dark, setDark] = useState(false);
-  const location = useLocation();
+  const [dark, setDark] = useState(() => {
+    return localStorage.getItem("theme") === "dark";
+  });
 
   useEffect(() => {
-    document.body.className = dark ? "dark" : "light";
+    localStorage.setItem("theme", dark? "dark" : "light");
   }, [dark]);
 
   return(
@@ -48,6 +50,11 @@ export default function App() {
         <Route path="/dashboard" element={
           <PageTransition>  
             <Dashboard  dark={dark} setDark={setDark}/>
+          </PageTransition>
+        } />
+        <Route path="/add-expense" element={
+          <PageTransition>
+          <AddExpense dark={dark} setDark={setDark}/>
           </PageTransition>
         } />
       </Routes>

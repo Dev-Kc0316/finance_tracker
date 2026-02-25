@@ -6,15 +6,16 @@ import Chart from '../components/Chart';
 import { api } from '../services/api';
 import '../styles/dashboard.css';
 import { FaExclamationTriangle } from 'react-icons/fa';
+import { FaBars } from 'react-icons/fa';
 
 
-export default function Dashboard() {
+export default function Dashboard({dark, setDark}) {
     const [expenses, setExpenses] = useState([]);
-    const [dark, setDark] = useState(false);
     const [username, setUsername] = useState("");
     const [balance, setBalance] = useState("");
     const [monthlyExpenses, setMonthlyExpenses] = useState(0);
     const [savingsRate, setSavingsRate] = useState(0);
+    const [sidebarOpen, setSidebarOpen] = useState(false);
 
  const loadDashboard = async () => {
    try {
@@ -39,9 +40,14 @@ useEffect(()=>{
 
     return(
         <div className={`dashboard ${dark ? "dark" : ""}`}>
-            <Sidebar />
+            <Sidebar open={sidebarOpen} setOpen={setSidebarOpen} />
             <div className="main-content">
+                
                 <div className="dashboard-header">
+                    <div className="mobile-menu-btn" onClick={() => setSidebarOpen(true)} >
+                        <FaBars />
+                    </div>
+
                     <div className='hero-header'>
                     <h2>Welcome back, {username}</h2>
                     <p>Your financial overview today</p>
@@ -68,9 +74,13 @@ useEffect(()=>{
                             "gray" 
                         }}>
                         
+                        <span>
                         { savingsRate }%
-
+                        </span>
                         <div style={{display: "flex", alignItems: "center", gap: "0.09rem"}}>
+
+                            
+
                         {savingsRate < 0 && (
                             <>
                             <FaExclamationTriangle size={16}/>
@@ -90,14 +100,15 @@ useEffect(()=>{
                     </div>
                     <div className="card table">
                         <h3>Recent Expenses</h3>
-
-                        <table className="expense-table">
-                            <thead>
-                                <tr>
-                                    <th>Title</th>
-                                    <th>Amount</th>
-                                    <th>Category</th>
-                                </tr>
+                        
+                        <div className="table-wrapper">
+                            <table className="expense-table">
+                                <thead>
+                                    <tr>
+                                        <th>Title</th>
+                                        <th>Amount</th>
+                                        <th>Category</th>
+                                    </tr>
                             </thead>
 
                             <tbody>
@@ -109,7 +120,8 @@ useEffect(()=>{
                                     </tr>
                                 ))}
                             </tbody>
-                        </table>
+                            </table>
+                        </div>
                     </div>
                 </div>
                

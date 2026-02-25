@@ -8,11 +8,14 @@ export default function Chart({expenses}) {
     const categories = [...new Set(expenses.map(e => e.category))];
     const amounts = categories.map(cat => expenses.filter(e => e.category === cat).reduce((sum, e) => sum + e.amount, 0));
 
-    const data = {labels: categories, datasets: [{data: amounts, backgroundColor: ["#ff6384", "#36a2eb", "#ffcd56", "#4bc0c0"]}]};
+    const data = {labels: categories, datasets: [{data: amounts, backgroundColor: ["#83f28f", "#36a2eb", "#ffcd56", "#4bc0c0"]}]};
 
     return ( 
-        <div style={{width: "400px"}}>
-            <Pie data={data} />
+        <div className='chart-container'>
+            <Pie data={data} options={{
+                responsive: true,
+                maintainAspectRatio: false
+            }}/>
         </div>
     );
 }
