@@ -124,7 +124,7 @@ useEffect(()=>{
                                 {expenses.map(exp => (
                                     <tr key={exp._id}>
                                         <td>{exp.title}</td>
-                                        <td>${exp.amount}</td>
+                                        <td>${Number(exp.amount).toLocaleString()}</td>
                                         <td>{exp.category}</td>
                                     </tr>
                                 ))}
