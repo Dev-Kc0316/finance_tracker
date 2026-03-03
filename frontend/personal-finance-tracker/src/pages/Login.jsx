@@ -1,14 +1,21 @@
-import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { api } from '../services/api';
 import '../styles/login.css';
 
 export default function Login(){
     const navigate = useNavigate();
+    const location = useLocation();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
+
+    useEffect(() => {
+        if(location.state?.resetSuccess){
+            setMessage("Password reset successfully. Please login.");
+        }
+    }, []);
 
     const login = async (e) => {
         e.preventDefault();

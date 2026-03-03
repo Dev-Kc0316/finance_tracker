@@ -41,9 +41,9 @@ export default function App() {
           </PageTransition>
           } />
 
-        <Route path="/reset-password" element={
+        <Route path="/reset-password/:uid/:token" element={
           <PageTransition>
-          <ResetPassword />
+            <ResetPassword />
           </PageTransition>
           } />
 
@@ -54,7 +54,7 @@ export default function App() {
         } />
         <Route path="/add-expense" element={
           <PageTransition>
-          <AddExpense dark={dark} setDark={setDark}/>
+            <AddExpense dark={dark} setDark={setDark}/>
           </PageTransition>
         } />
       </Routes>

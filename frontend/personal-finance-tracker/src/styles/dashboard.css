@@ -294,6 +294,36 @@ html, body{
     margin-bottom: 0.5rem;
     color: #161a22;
 }
+.date-filter-bar{
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+    margin-bottom: 2.5rem;
+}
+.date-filter-bar input{
+    padding: 0.6rem;
+    border-radius: 0.5rem;
+    border: 0.063rem solid #ddd;
+    background: #6366f1;
+    font-size: 1rem;
+    font-weight: 600;
+    color: white;
+}
+.date-filter-bar button{
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    border: none;
+    background: #6366f1;
+    font-size: 1rem;
+    font-weight: 600;
+    color: white;
+}
+.date-filter-bar button:hover{
+    background: #7173f6;
+    transition: transform 0.3s ease;
+}
 
 @media (max-width: 900px) {
     .stats-row{

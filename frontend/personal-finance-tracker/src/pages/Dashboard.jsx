@@ -16,11 +16,20 @@ export default function Dashboard({dark, setDark}) {
     const [monthlyExpenses, setMonthlyExpenses] = useState(0);
     const [savingsRate, setSavingsRate] = useState(0);
     const [sidebarOpen, setSidebarOpen] = useState(false);
+    const [filters, setFilters] = useState({
+        start: "",
+        end: ""
+    });
 
  const loadDashboard = async () => {
    try {
 
-      const { data } = await api.get("finance/dashboard/");
+      const { data } = await api.get("finance/dashboard/", {
+        params: {
+            ...(filters.start && { start: filters.start }),
+            ...(filters.end && { end: filters.end }),
+        }
+      });
 
       setExpenses(data.transactions || []);
       setBalance(data.summary?.balance || 0);
@@ -35,7 +44,7 @@ export default function Dashboard({dark, setDark}) {
 
 useEffect(()=>{
    loadDashboard();
-}, []);
+}, [filters]);
 
 
     return(

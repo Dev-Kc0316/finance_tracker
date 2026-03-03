@@ -10,10 +10,16 @@ export default function AddExpense({dark, setDark}) {
 
     const [expenses, setExpenses] = useState([]);
     const [sidebarOpen, setSidebarOpen] = useState(false);
+    const [filters, setFilters] = useState({start: "", end: ""});
 
     const loadExpenses = async () => {
         try{
-            const { data } = await api.get("finance/dashboard/");
+            const { data } = await api.get("finance/dashboard/", {
+                params: {
+                    ...(filters.start && { start: filters.start }),
+                    ...(filters.end && { end: filters.end }),
+                },
+            });
             setExpenses(data.transactions || []);
         } catch(err) {
             console.error(err);
@@ -44,6 +50,28 @@ export default function AddExpense({dark, setDark}) {
                  <div className="card table">
                         <h3>Recent Expenses</h3>
                         
+                        <div className="date-filter-bar">
+                            <input 
+                            type="date" 
+                            value={filters.start}
+                            onChange={(e) => 
+                                setFilters({ ...filters, start: e.target.value })}
+                            />
+
+                            <input 
+                            type="date" 
+                            value={filters.end}
+                            onChange={(e) => 
+                                setFilters({ ...filters, end: e.target.value })
+                            }
+                            />
+
+                            <button onClick={loadExpenses}>
+                                Apply Filter
+                            </button>
+
+                        </div>
+
                         <div className="table-wrapper">
                             <table className="expense-table">
                                 <thead>

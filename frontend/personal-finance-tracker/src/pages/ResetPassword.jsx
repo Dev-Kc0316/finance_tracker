@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { api } from '../services/api';
+import { useNavigate, useParams } from 'react-router-dom';
 import './auth.css';
 
 export default function ResetPassword() {
@@ -8,6 +9,9 @@ export default function ResetPassword() {
         code: "",
         password: ""
     });
+
+    const navigate = useNavigate();
+    const {uid, token} = useParams();
 
     const [message, setMessage] = useState("");
     const [error, setError] = useState("");
@@ -22,8 +26,19 @@ export default function ResetPassword() {
         setMessage("");
 
         try {
-            const res = await api.post("users/reset-password/", form);
+            const res = await api.post("users/reset-password/", {
+                uid,
+                token,
+                email: form.email,
+                code: form.code,
+                password: form.password
+            });
             setMessage("Password reset successful.");
+
+            setTimeout(() => {
+                navigate("/", { state: {resetSuccess: true} });
+            }, 1500);
+
         } catch (err) {
             const msg = err.response?.data?.error || err.message;
             setError(msg);

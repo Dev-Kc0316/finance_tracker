@@ -10,7 +10,7 @@ Icon?
 
 
 # Python / Django
-
+backend/finance_tracker/finance_tracker/settings.py
 
 # virtual environments
 venv/

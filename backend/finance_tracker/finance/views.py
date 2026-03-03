@@ -7,6 +7,7 @@ from .services import (
     calculate_balance
 )
 from .serializers import serialize_list, serialize_doc
+from django.utils.dateparse import parse_date
 
 
 @api_view(["POST"])
@@ -33,14 +34,24 @@ def add_transaction(request):
 @permission_classes([IsAuthenticated])
 def dashboard(request):
 
-    transactions = get_user_transactions(request.user.id)
+    start_date = request.GET.get("start") or None
+    end_date = request.GET.get("end") or None
 
-    summary = calculate_balance(request.user.id)
+    transactions = get_user_transactions(
+        request.user.id,
+        start_date,
+        end_date
+    )
+
+    summary = calculate_balance(
+        request.user.id,
+        start_date,
+        end_date
+    )
 
     return Response({
         "success": True,
         "user": {
-            
             "username": request.user.username
         },
         "transactions": serialize_list(transactions),

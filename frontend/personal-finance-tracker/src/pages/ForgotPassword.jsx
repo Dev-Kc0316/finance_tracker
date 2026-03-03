@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { api } from '../services/api';
 import './auth.css';
 
@@ -7,6 +7,17 @@ export default function ForgotPassword(){
     const [message, setMessage] = useState("");
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
+    const [cooldown, setCooldown] = useState(0);
+
+    useEffect (() => {
+                if(cooldown <= 0) return;
+
+                const timer = setInterval(() => {
+                    setCooldown(prev => prev -1);
+                }, 1000);
+
+                return () => clearInterval(timer);
+            }, [cooldown]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -14,9 +25,15 @@ export default function ForgotPassword(){
         setError("");
         setMessage("");
 
+        if(cooldown > 0) return;
+
         try {
             const res = await api.post("users/forgot-password/",{ email });
             setMessage("Reset code sent to your email");
+
+            setCooldown(60);
+            
+
         } catch (err) {
             const msg = err.response?.data?.error || err.message || "Something went wrong";
             setError(msg);
@@ -35,7 +52,9 @@ export default function ForgotPassword(){
 
                 <input type="email" placeholder="Enter your email" value={email} required onChange={(e) => setEmail(e.target.value)} />
                 
-                <button disabled={loading}>{loading ? "Sending..." : "Send Reset Code"}</button>
+                <button type='submit' disabled={cooldown > 0}>
+                    {cooldown > 0 ? `Resend in ${cooldown}s`: "Send Reset Email"}
+                </button>
             </form>
         </div>
     );
